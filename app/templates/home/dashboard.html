@@ -1,0 +1,57 @@
+{% import "bootstrap/utils.html" as utils %}
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block body %}
+<!--<div class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="intro-message">
+                    <h1>The Dashboard</h1>
+                    <h3>We made it here!</h3>
+                    <hr class="intro-divider">
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>-->
+
+<body>
+    <script>
+        function deleteNote(noteId) {
+            fetch("/delete-note", {
+                method: "POST",
+                body: JSON.stringify({ noteId: noteId }),
+            }).then((_res) => {
+                window.location.href = "{{ url_for( 'home.dashboard') }}";
+            });
+        }
+    </script>
+    <div class="content-section">
+        <br />
+        {{ utils.flashed_messages() }}
+        <br />
+        <div class="container">
+            <h1 align="center">Notes</h1>
+            <ul class="list-group list-group-flush" id="notes">
+                {% for note in employee.notes %}
+                <li class="list-group-item">
+                    {{ note.data }}
+                    <button type="button" class="close" onClick="deleteNote({{ note.id }})">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </li>
+                {% endfor %}
+            </ul>
+            <form action="/dashboard" method="POST">
+                <textarea name="note" id="note" class="form-control"></textarea>
+                <br />
+                <div align="center">
+                    <button type="submit" class="btn btn-primary">Add Note</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+{% endblock %}
